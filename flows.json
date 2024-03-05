@@ -1,0 +1,271 @@
+[
+    {
+        "id": "521defbf4c3e48b3",
+        "type": "mqtt in",
+        "z": "679e1c906a9d4c0b",
+        "name": "",
+        "topic": "upec/W007/telemetrie",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "2d9054fe7e0da96e",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 220,
+        "y": 180,
+        "wires": [
+            [
+                "37fff3e422845b5a",
+                "650f36b897697d93",
+                "9228ac68ffbaa079"
+            ]
+        ]
+    },
+    {
+        "id": "37fff3e422845b5a",
+        "type": "debug",
+        "z": "679e1c906a9d4c0b",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 480,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "650f36b897697d93",
+        "type": "ui_text",
+        "z": "679e1c906a9d4c0b",
+        "group": "1376d85b57128696",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "text",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 330,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "9228ac68ffbaa079",
+        "type": "influxdb out",
+        "z": "679e1c906a9d4c0b",
+        "influxdb": "9678a4366b8b8964",
+        "name": "",
+        "measurement": "etat",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "W007",
+        "bucket": "ESP32",
+        "x": 180,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "53a5e4bfe89e53a5",
+        "type": "ui_dropdown",
+        "z": "679e1c906a9d4c0b",
+        "name": "",
+        "label": "Etat barriere",
+        "tooltip": "",
+        "place": "Select option",
+        "group": "1376d85b57128696",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "multiple": false,
+        "options": [
+            {
+                "label": "Libre",
+                "value": "0",
+                "type": "str"
+            },
+            {
+                "label": "Occupé",
+                "value": "1",
+                "type": "str"
+            },
+            {
+                "label": "Reservé",
+                "value": "2",
+                "type": "str"
+            }
+        ],
+        "payload": "",
+        "topic": "topic",
+        "topicType": "msg",
+        "className": "",
+        "x": 510,
+        "y": 260,
+        "wires": [
+            [
+                "e27408122bcc711c"
+            ]
+        ]
+    },
+    {
+        "id": "e27408122bcc711c",
+        "type": "mqtt out",
+        "z": "679e1c906a9d4c0b",
+        "name": "",
+        "topic": "upec/W007/communicate/barriere",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "2d9054fe7e0da96e",
+        "x": 720,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "a0e816796ddd4196",
+        "type": "ui_text_input",
+        "z": "679e1c906a9d4c0b",
+        "name": "",
+        "label": "Reservation id ",
+        "tooltip": "",
+        "group": "1376d85b57128696",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "mode": "text",
+        "delay": 300,
+        "topic": "topic",
+        "sendOnBlur": true,
+        "className": "",
+        "topicType": "msg",
+        "x": 520,
+        "y": 420,
+        "wires": [
+            [
+                "b6ae8b3a686814c7"
+            ]
+        ]
+    },
+    {
+        "id": "68e6b827a2c2e7d1",
+        "type": "mqtt out",
+        "z": "679e1c906a9d4c0b",
+        "name": "",
+        "topic": "upec/W007/communicate/reservation",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "2d9054fe7e0da96e",
+        "x": 730,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "b6ae8b3a686814c7",
+        "type": "function",
+        "z": "679e1c906a9d4c0b",
+        "name": "trim func",
+        "func": "msg.payload = msg.payload.trim()\nif (msg.payload != \"\")\n    return msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 460,
+        "y": 480,
+        "wires": [
+            [
+                "68e6b827a2c2e7d1"
+            ]
+        ]
+    },
+    {
+        "id": "2d9054fe7e0da96e",
+        "type": "mqtt-broker",
+        "name": "test.mosquitto.org",
+        "broker": "test.mosquitto.org",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "1376d85b57128696",
+        "type": "ui_group",
+        "name": "Default",
+        "tab": "3c21badd9ae2a7d9",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "9678a4366b8b8964",
+        "type": "influxdb",
+        "hostname": "127.0.0.1",
+        "port": "8086",
+        "protocol": "http",
+        "database": "database",
+        "name": "influx cloud",
+        "usetls": false,
+        "tls": "",
+        "influxdbVersion": "2.0",
+        "url": "https://eu-central-1-1.aws.cloud2.influxdata.com/",
+        "timeout": "10",
+        "rejectUnauthorized": true
+    },
+    {
+        "id": "3c21badd9ae2a7d9",
+        "type": "ui_tab",
+        "name": "Home",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    }
+]
