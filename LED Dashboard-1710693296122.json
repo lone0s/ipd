@@ -1,0 +1,452 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 2,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "ce198cd2-58b0-4ae0-aa91-bb62a0306e76"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 20,
+            "gradientMode": "scheme",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 3,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 0.7
+              },
+              {
+                "color": "#EAB839",
+                "value": 1.4
+              }
+            ]
+          },
+          "unitScale": true
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 3,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "hidden",
+          "placement": "right",
+          "showLegend": false
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "10.3.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ce198cd2-58b0-4ae0-aa91-bb62a0306e76"
+          },
+          "query": "from(bucket: \"ESP32\")\r\n  |> range(start: -1h)\r\n  |> filter(fn: (r) => r._measurement == \"etatLed\" and r[\"_field\"] == \"value\" and exists r[\"_value\"])\r\n  |> map(fn: (r) => ({\r\n      _time: r._time,\r\n      _value: r._value,\r\n      state: if r._value == 0 then \"Green\"\r\n             else if r._value == 1 then \"Red\"\r\n             else if r._value == 2 then \"Orange\"\r\n             else \"Unknown\"\r\n  }))\r\n",
+          "refId": "A"
+        }
+      ],
+      "title": "Colored LED Chart",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "ce198cd2-58b0-4ae0-aa91-bb62a0306e76"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unitScale": true
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "10.3.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ad07d273-153c-4f50-9af7-4a066134d24d"
+          },
+          "query": "from(bucket: \"ESP32\")\r\n  |> range(start: -1h)\r\n  |> filter(fn: (r) => r._measurement == \"etatLed\" and r[\"_field\"] == \"value\" and exists r[\"_value\"])\r\n",
+          "refId": "A"
+        }
+      ],
+      "title": "Etat LED",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "ce198cd2-58b0-4ae0-aa91-bb62a0306e76"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-GrYlRd"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unitScale": true
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 6,
+        "y": 8
+      },
+      "id": 4,
+      "options": {
+        "displayMode": "lcd",
+        "maxVizHeight": 300,
+        "minVizHeight": 16,
+        "minVizWidth": 8,
+        "namePlacement": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "sizing": "auto",
+        "valueMode": "color"
+      },
+      "pluginVersion": "10.3.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ce198cd2-58b0-4ae0-aa91-bb62a0306e76"
+          },
+          "query": "from(bucket: \"ESP32\")\r\n  |> range(start: -1h)\r\n  |> filter(fn: (r) => r._measurement == \"etatLed\" and r[\"_field\"] == \"value\" and exists r[\"_value\"])\r\n  |> map(fn: (r) => ({\r\n      _time: r._time,\r\n      _value: r._value,\r\n      state: if r._value == 0 then \"Green\"\r\n             else if r._value == 1 then \"Red\"\r\n             else if r._value == 2 then \"Orange\"\r\n             else \"Unknown\"\r\n  }))\r\n  |> group(columns: [\"state\"])\r\n  |> count()\r\n",
+          "refId": "A"
+        }
+      ],
+      "title": "LED color bar gauge",
+      "type": "bargauge"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "ce198cd2-58b0-4ae0-aa91-bb62a0306e76"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "fieldMinMax": false,
+          "mappings": [
+            {
+              "options": {
+                "_count 0": {
+                  "color": "dark-green",
+                  "index": 0,
+                  "text": "FREE"
+                },
+                "_count 1": {
+                  "color": "dark-red",
+                  "index": 1,
+                  "text": "OCCUPIED"
+                },
+                "_count 2": {
+                  "color": "dark-orange",
+                  "index": 2,
+                  "text": "RESERVED"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "unitScale": true
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 16
+      },
+      "id": 2,
+      "options": {
+        "displayLabels": [
+          "name",
+          "value"
+        ],
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "pieType": "donut",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "10.3.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ce198cd2-58b0-4ae0-aa91-bb62a0306e76"
+          },
+          "query": "from(bucket: \"ESP32\") \r\n  |> range(start: -1h) \r\n  |> filter(fn: (r) => r._measurement == \"etatParking\" and r[\"_field\"] == \"value\" and exists r[\"_value\"])\r\n  |> map(fn: (r) => ({\r\n      status: if r._value == 0 then \"FREE\"\r\n              else if r._value == 1 then \"OCCUPIED\"\r\n              else if r._value == 2 then \"RESERVED\"\r\n              else \"UNKNOWN\",\r\n      count: 1\r\n  }))\r\n  |> group(columns: [\"status\"])\r\n  |> sum(column: \"count\")\r\n",
+          "refId": "A"
+        }
+      ],
+      "title": "Répartitions état parking",
+      "type": "piechart"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "ce198cd2-58b0-4ae0-aa91-bb62a0306e76"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [],
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 70
+              },
+              {
+                "color": "red",
+                "value": 85
+              }
+            ]
+          },
+          "unitScale": true
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 16
+      },
+      "id": 5,
+      "options": {
+        "minVizHeight": 75,
+        "minVizWidth": 75,
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "sizing": "auto"
+      },
+      "pluginVersion": "10.3.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "ce198cd2-58b0-4ae0-aa91-bb62a0306e76"
+          },
+          "query": "from(bucket: \"ESP32\") \r\n  |> range(start: -1h) \r\n  |> filter(fn: (r) => r._measurement == \"etatParking\" and r[\"_field\"] == \"value\" and exists r[\"_value\"])\r\n  |> map(fn: (r) => ({\r\n      status: if r._value == 0 then \"FREE\"\r\n              else if r._value == 1 then \"OCCUPIED\"\r\n              else if r._value == 2 then \"RESERVED\"\r\n              else \"UNKNOWN\",\r\n      count: 1\r\n  }))\r\n  |> group(columns: [\"status\"])\r\n  |> sum(column: \"count\")\r\n",
+          "refId": "A"
+        }
+      ],
+      "title": "Parking state Color Gauge",
+      "type": "gauge"
+    }
+  ],
+  "refresh": "5s",
+  "schemaVersion": 39,
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "LED Dashboard",
+  "uid": "a42c39ad-1f12-4138-a77f-b8f3a247fb18",
+  "version": 8,
+  "weekStart": ""
+}

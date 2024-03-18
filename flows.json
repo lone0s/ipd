@@ -2,9 +2,9 @@
     {
         "id": "521defbf4c3e48b3",
         "type": "mqtt in",
-        "z": "679e1c906a9d4c0b",
+        "z": "6c4e7b34120b96fb",
         "name": "",
-        "topic": "upec/W007/telemetrie",
+        "topic": "upec/W007/telemetrie/parking",
         "qos": "2",
         "datatype": "auto-detect",
         "broker": "2d9054fe7e0da96e",
@@ -12,20 +12,20 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 220,
-        "y": 180,
+        "x": 460,
+        "y": 340,
         "wires": [
             [
                 "37fff3e422845b5a",
-                "650f36b897697d93",
-                "9228ac68ffbaa079"
+                "9228ac68ffbaa079",
+                "26be831715d1078f"
             ]
         ]
     },
     {
         "id": "37fff3e422845b5a",
         "type": "debug",
-        "z": "679e1c906a9d4c0b",
+        "z": "6c4e7b34120b96fb",
         "name": "debug 1",
         "active": true,
         "tosidebar": true,
@@ -35,98 +35,16 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 480,
-        "y": 160,
+        "x": 760,
+        "y": 220,
         "wires": []
     },
     {
-        "id": "650f36b897697d93",
-        "type": "ui_text",
-        "z": "679e1c906a9d4c0b",
-        "group": "1376d85b57128696",
-        "order": 0,
-        "width": 0,
-        "height": 0,
-        "name": "",
-        "label": "text",
-        "format": "{{msg.payload}}",
-        "layout": "row-spread",
-        "className": "",
-        "style": false,
-        "font": "",
-        "fontSize": 16,
-        "color": "#000000",
-        "x": 330,
-        "y": 320,
-        "wires": []
-    },
-    {
-        "id": "9228ac68ffbaa079",
-        "type": "influxdb out",
-        "z": "679e1c906a9d4c0b",
-        "influxdb": "9678a4366b8b8964",
-        "name": "",
-        "measurement": "etat",
-        "precision": "",
-        "retentionPolicy": "",
-        "database": "database",
-        "precisionV18FluxV20": "ms",
-        "retentionPolicyV18Flux": "",
-        "org": "W007",
-        "bucket": "ESP32",
-        "x": 180,
-        "y": 380,
-        "wires": []
-    },
-    {
-        "id": "53a5e4bfe89e53a5",
-        "type": "ui_dropdown",
-        "z": "679e1c906a9d4c0b",
-        "name": "",
-        "label": "Etat barriere",
-        "tooltip": "",
-        "place": "Select option",
-        "group": "1376d85b57128696",
-        "order": 2,
-        "width": 0,
-        "height": 0,
-        "passthru": true,
-        "multiple": false,
-        "options": [
-            {
-                "label": "Libre",
-                "value": "0",
-                "type": "str"
-            },
-            {
-                "label": "Occupé",
-                "value": "1",
-                "type": "str"
-            },
-            {
-                "label": "Reservé",
-                "value": "2",
-                "type": "str"
-            }
-        ],
-        "payload": "",
-        "topic": "topic",
-        "topicType": "msg",
-        "className": "",
-        "x": 510,
-        "y": 260,
-        "wires": [
-            [
-                "e27408122bcc711c"
-            ]
-        ]
-    },
-    {
-        "id": "e27408122bcc711c",
+        "id": "68e6b827a2c2e7d1",
         "type": "mqtt out",
-        "z": "679e1c906a9d4c0b",
+        "z": "6c4e7b34120b96fb",
         "name": "",
-        "topic": "upec/W007/communicate/barriere",
+        "topic": "upec/W007/communicate/reservation",
         "qos": "",
         "retain": "",
         "respTopic": "",
@@ -135,14 +53,52 @@
         "correl": "",
         "expiry": "",
         "broker": "2d9054fe7e0da96e",
-        "x": 720,
-        "y": 280,
+        "x": 850,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "b6ae8b3a686814c7",
+        "type": "function",
+        "z": "6c4e7b34120b96fb",
+        "name": "trim func",
+        "func": "msg.payload = msg.payload.trim()\nif (msg.payload != \"\")\n    return msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 600,
+        "y": 500,
+        "wires": [
+            [
+                "68e6b827a2c2e7d1"
+            ]
+        ]
+    },
+    {
+        "id": "9228ac68ffbaa079",
+        "type": "influxdb out",
+        "z": "6c4e7b34120b96fb",
+        "influxdb": "9678a4366b8b8964",
+        "name": "",
+        "measurement": "etatParking",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "W007",
+        "bucket": "ESP32",
+        "x": 820,
+        "y": 340,
         "wires": []
     },
     {
         "id": "a0e816796ddd4196",
         "type": "ui_text_input",
-        "z": "679e1c906a9d4c0b",
+        "z": "6c4e7b34120b96fb",
         "name": "",
         "label": "Reservation id ",
         "tooltip": "",
@@ -154,11 +110,9 @@
         "mode": "text",
         "delay": 300,
         "topic": "topic",
-        "sendOnBlur": true,
-        "className": "",
         "topicType": "msg",
-        "x": 520,
-        "y": 420,
+        "x": 420,
+        "y": 500,
         "wires": [
             [
                 "b6ae8b3a686814c7"
@@ -166,11 +120,52 @@
         ]
     },
     {
-        "id": "68e6b827a2c2e7d1",
-        "type": "mqtt out",
-        "z": "679e1c906a9d4c0b",
+        "id": "650f36b897697d93",
+        "type": "ui_text",
+        "z": "6c4e7b34120b96fb",
+        "group": "1376d85b57128696",
+        "order": 0,
+        "width": 0,
+        "height": 0,
         "name": "",
-        "topic": "upec/W007/communicate/reservation",
+        "label": "Etat Parking ",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "x": 930,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "7a453144.85bad",
+        "type": "inject",
+        "z": "6c4e7b34120b96fb",
+        "name": "Reset preferences (wifi saved credentials)",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "",
+        "topic": "",
+        "payload": "reset",
+        "payloadType": "str",
+        "x": 500,
+        "y": 740,
+        "wires": [
+            [
+                "bca81c8b88478434"
+            ]
+        ]
+    },
+    {
+        "id": "bca81c8b88478434",
+        "type": "mqtt out",
+        "z": "6c4e7b34120b96fb",
+        "name": "",
+        "topic": "upec/W007/communicate/clearCredentials",
         "qos": "",
         "retain": "",
         "respTopic": "",
@@ -179,29 +174,283 @@
         "correl": "",
         "expiry": "",
         "broker": "2d9054fe7e0da96e",
-        "x": 730,
-        "y": 480,
+        "x": 860,
+        "y": 740,
         "wires": []
     },
     {
-        "id": "b6ae8b3a686814c7",
+        "id": "ea6bbc56d17ac233",
+        "type": "ui_numeric",
+        "z": "6c4e7b34120b96fb",
+        "name": "",
+        "label": "Upload rate speed/s",
+        "tooltip": "",
+        "group": "1376d85b57128696",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "wrap": false,
+        "passthru": true,
+        "topic": "topic",
+        "topicType": "msg",
+        "format": "{{value}}",
+        "min": "1",
+        "max": "20",
+        "step": 1,
+        "x": 440,
+        "y": 660,
+        "wires": [
+            [
+                "ef22e26841402c24"
+            ]
+        ]
+    },
+    {
+        "id": "ef22e26841402c24",
+        "type": "mqtt out",
+        "z": "6c4e7b34120b96fb",
+        "name": "",
+        "topic": "upec/W007/communicate/uploadRate",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "2d9054fe7e0da96e",
+        "x": 850,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "26be831715d1078f",
         "type": "function",
-        "z": "679e1c906a9d4c0b",
-        "name": "trim func",
-        "func": "msg.payload = msg.payload.trim()\nif (msg.payload != \"\")\n    return msg;",
+        "z": "6c4e7b34120b96fb",
+        "name": "Int to Str",
+        "func": "if (msg.payload === 0)\n    msg.payload = \"LIBRE\"\nelse if (msg.payload === 1)\n    msg.payload = \"OCCUPE\"\nelse \n    msg.payload = \"RESERVE\"\n    \nreturn msg",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 460,
-        "y": 480,
+        "x": 760,
+        "y": 280,
         "wires": [
             [
-                "68e6b827a2c2e7d1"
+                "650f36b897697d93"
             ]
         ]
+    },
+    {
+        "id": "94bfc6916efbcc06",
+        "type": "mqtt out",
+        "z": "6c4e7b34120b96fb",
+        "name": "",
+        "topic": "upec/W007/communicate/LEDColor",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "2d9054fe7e0da96e",
+        "x": 840,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "7a9e1f0cb13e45bb",
+        "type": "ui_dropdown",
+        "z": "6c4e7b34120b96fb",
+        "name": "",
+        "label": "Etat LED",
+        "tooltip": "",
+        "place": "Select option",
+        "group": "1376d85b57128696",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "multiple": false,
+        "options": [
+            {
+                "label": "Vert",
+                "value": "0",
+                "type": "str"
+            },
+            {
+                "label": "Rouge",
+                "value": "1",
+                "type": "str"
+            },
+            {
+                "label": "Orange",
+                "value": "2",
+                "type": "str"
+            }
+        ],
+        "payload": "",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 400,
+        "y": 580,
+        "wires": [
+            [
+                "94bfc6916efbcc06"
+            ]
+        ]
+    },
+    {
+        "id": "6642331c5517124b",
+        "type": "mqtt in",
+        "z": "6c4e7b34120b96fb",
+        "name": "",
+        "topic": "upec/W007/telemetrie/led",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "2d9054fe7e0da96e",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 450,
+        "y": 140,
+        "wires": [
+            [
+                "dbeae62730df17b2",
+                "b63facbfbe7070f1",
+                "6fde9f7c8008bacf"
+            ]
+        ]
+    },
+    {
+        "id": "dbeae62730df17b2",
+        "type": "debug",
+        "z": "6c4e7b34120b96fb",
+        "name": "LED",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 750,
+        "y": 20,
+        "wires": []
+    },
+    {
+        "id": "b63facbfbe7070f1",
+        "type": "influxdb out",
+        "z": "6c4e7b34120b96fb",
+        "influxdb": "9678a4366b8b8964",
+        "name": "",
+        "measurement": "etatLed",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "W007",
+        "bucket": "ESP32",
+        "x": 810,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "5d76f55cf9814709",
+        "type": "ui_text",
+        "z": "6c4e7b34120b96fb",
+        "group": "1376d85b57128696",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Etat LED ",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "x": 920,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "6fde9f7c8008bacf",
+        "type": "function",
+        "z": "6c4e7b34120b96fb",
+        "name": "Int to Str",
+        "func": "if (msg.payload === 0)\n    msg.payload = \"VERT\"\nelse if (msg.payload === 1)\n    msg.payload = \"ROUGE\"\nelse \n    msg.payload = \"ORANGE\"\n    \nreturn msg",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 760,
+        "y": 80,
+        "wires": [
+            [
+                "5d76f55cf9814709"
+            ]
+        ]
+    },
+    {
+        "id": "53a5e4bfe89e53a5",
+        "type": "ui_dropdown",
+        "z": "6c4e7b34120b96fb",
+        "name": "",
+        "label": "Etat Barriere",
+        "tooltip": "",
+        "place": "Select option",
+        "group": "1376d85b57128696",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "multiple": false,
+        "options": [
+            {
+                "label": "Ouvrir",
+                "value": "0",
+                "type": "str"
+            },
+            {
+                "label": "Fermer",
+                "value": "1",
+                "type": "str"
+            }
+        ],
+        "payload": "",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 410,
+        "y": 420,
+        "wires": [
+            [
+                "e27408122bcc711c"
+            ]
+        ]
+    },
+    {
+        "id": "e27408122bcc711c",
+        "type": "mqtt out",
+        "z": "6c4e7b34120b96fb",
+        "name": "",
+        "topic": "upec/W007/communicate/barriere",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "2d9054fe7e0da96e",
+        "x": 840,
+        "y": 420,
+        "wires": []
     },
     {
         "id": "2d9054fe7e0da96e",
@@ -235,17 +484,6 @@
         "sessionExpiry": ""
     },
     {
-        "id": "1376d85b57128696",
-        "type": "ui_group",
-        "name": "Default",
-        "tab": "3c21badd9ae2a7d9",
-        "order": 1,
-        "disp": true,
-        "width": "6",
-        "collapse": false,
-        "className": ""
-    },
-    {
         "id": "9678a4366b8b8964",
         "type": "influxdb",
         "hostname": "127.0.0.1",
@@ -259,6 +497,16 @@
         "url": "https://eu-central-1-1.aws.cloud2.influxdata.com/",
         "timeout": "10",
         "rejectUnauthorized": true
+    },
+    {
+        "id": "1376d85b57128696",
+        "type": "ui_group",
+        "name": "Default",
+        "tab": "3c21badd9ae2a7d9",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false
     },
     {
         "id": "3c21badd9ae2a7d9",
