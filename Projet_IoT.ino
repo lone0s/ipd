@@ -41,6 +41,7 @@ const std::string dataUploadRateTopic = prefix + "communicate/uploadRate";
 const std::string ledColorTopic = prefix + "communicate/LEDColor";
 const std::string telemetrieParking = prefix + "telemetrie/parking";
 const std::string telemetrieLed = prefix + "telemetrie/led";
+const std::string telemetrieDistance = prefix + "telemetrie/distance";
 
 enum ParkingState {Free, Occupied, Reserved};
 enum ServoState {Opened, Closed};
@@ -544,6 +545,7 @@ void reconnect() {
 
       client.publish("outTopic", telemetrieParking.c_str());
       client.publish("outTopic", telemetrieLed.c_str());
+      client.publish("outTopic", telemetrieDistance.c_str());
 
       client.subscribe(barriereTopic.c_str());
       client.subscribe(reservationTopic.c_str());
@@ -598,8 +600,6 @@ void loop() {
   if (!wifiDataExists) server.handleClient();
   else {
     if (!client.connected()) reconnect();
-
-    loopOTA();
     
     client.loop();
 
@@ -609,9 +609,12 @@ void loop() {
       ++value;
       client.publish(telemetrieParking.c_str(), state == ParkingState::Free ? "0" : state == ParkingState::Occupied ? "1" : "2");
       client.publish(telemetrieLed.c_str(), ledState == Green ? "0" : ledState == Red ? "1" : "2");
+      client.publish(telemetrieDistance.c_str(), std::to_string(distCaptor.MeasureInCentimeters()).c_str());
     }
 
     processDistanceCaptorData();
     matchLedColorToParkingState();
+
+    loopOTA();
   }
 }
